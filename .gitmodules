@@ -1,0 +1,10 @@
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "external/okonomi-shadercompiler"]
+	path = external/okonomi-shadercompiler
+	url = https://github.com/kittikun/okonomi-shadercompiler.git
+[submodule "external/takoyaki"]
+	path = external/takoyaki
+	url = https://github.com/kittikun/takoyaki.git
+	branch = v2
