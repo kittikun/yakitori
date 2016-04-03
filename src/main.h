@@ -20,4 +20,11 @@
 
 #pragma once
 
-#include <stdexcept>
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+
+HWND MakeWindow();
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

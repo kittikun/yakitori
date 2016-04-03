@@ -19,8 +19,74 @@
 // THE SOFTWARE.
 
 #include "pch.h"
+#include "main.h"
 
 int main(int ac, char** av)
 {
+    MakeWindow();
+
     return 0;
+}
+
+HWND MakeWindow()
+{
+    WNDCLASSEX wcex = {};
+    HINSTANCE hInst = GetModuleHandle(0);
+
+    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInst;
+    wcex.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.lpszMenuName = NULL;
+    wcex.lpszClassName = L"Yakitori";
+    wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+
+    RegisterClassEx(&wcex);
+
+    auto hWnd = CreateWindowEx(NULL, L"Yakitori", L"Yakitori", WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 1280, 768,
+        NULL, NULL, hInst, NULL);
+
+    if (hWnd == nullptr)
+        throw std::runtime_error("Could not create window");
+
+    ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+    // main loop
+    MSG msg;
+    bool process = true;
+
+    while (process) {
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
+        if (msg.message == WM_QUIT)
+            break;
+    }
+
+    return hWnd;
+}
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    // sort through and find what code to run for the message given
+    switch (message) {
+        // this message is read when the window is closed
+        case WM_DESTROY:
+        {
+            // close the application entirely
+            PostQuitMessage(0);
+            return 0;
+        } break;
+    }
+
+    // Handle any messages the switch statement didn't
+    return DefWindowProc(hWnd, message, wParam, lParam);
 }
